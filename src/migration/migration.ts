@@ -1,22 +1,42 @@
 import 'dotenv/config';
-import neo4j from 'neo4j-driver';
+import fetch from 'node-fetch';
 
-const [neo4jUser, neo4jPassword] = process.env.NEO4J_AUTH.split('/');
-const driver = neo4j.driver(process.env.NEO4J_DB_URL, neo4j.auth.basic(neo4jUser, neo4jPassword));
+import { initConnection } from './helpers/db';
+
+const migrationMode = process.argv[2];
+const driver = initConnection();
+
+const FETCH_OPTIONS = {
+  method: 'get',
+  headers: {'Content-Type': 'application/json'},
+};
 
 export const up = async (): Promise<void> => {
   const session = driver.session();
 
-  try {
-    const result = await session.run('SHOW DATABASES');
-    console.log(result);
-  } catch (err) {
-    console.error(err);
-  }
+	try {
+    const response = await fetch(process.env.DATA_FILE_URL, FETCH_OPTIONS);
+    const { data } = await response.json();
+    
+    if (!data?.length) {
+      throw Error("No data has been received");
+    }
 
-  await session.close();
+    console.log(data);
+  
+		const result = await session.run('SHOW DATABASES');
+		console.log(result);
+	} catch (err) {
+		console.error(err);
+	}
+
+	await session.close();
 };
 
 export const down = (): void => {};
 
-up();
+if (migrationMode === 'UP') {
+	up();
+} else {
+	down();
+}
