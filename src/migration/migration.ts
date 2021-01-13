@@ -22,9 +22,16 @@ export const up = async (): Promise<void> => {
       throw Error("No data has been received");
     }
 
-    console.log(data);
+    const query = ` 
+      UNWIND $items as items
+      CREATE (a:Node) SET a = items
+    `;
   
-		const result = await session.run('SHOW DATABASES');
+    const importData = {
+      items: data
+    };
+  
+		const result = await session.run(query, importData);
 		console.log(result);
 	} catch (err) {
 		console.error(err);
