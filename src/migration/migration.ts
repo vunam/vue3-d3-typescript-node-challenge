@@ -1,10 +1,9 @@
 import 'dotenv/config';
-
 import chalk from 'chalk';
 import fetch from 'node-fetch';
 import PrettyError from 'pretty-error';
 
-import { initConnection } from './helpers/db';
+import { initConnection } from '@shared/helpers/db';
 
 new PrettyError().start();
 
