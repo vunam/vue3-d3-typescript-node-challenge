@@ -14,29 +14,29 @@ const prettyLog = (text: string) => console.log(chalk.yellow(text));
 const migrationMode = process.argv[2] as MigrationType;
 
 const up = async (): Promise<void> => {
-  await initConnection();
+    await initConnection();
 
-  try {
-    const response = await fetch(process.env.DATA_FILE_URL, {
-      method: 'get',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const { data } = await response.json();
+    try {
+        const response = await fetch(process.env.DATA_FILE_URL, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const { data } = await response.json();
 
-    if (!data?.length) {
-      throw Error('No data has been received');
-    }
+        if (!data?.length) {
+            throw Error('No data has been received');
+        }
 
-    const query = ` 
+        const query = ` 
       UNWIND $items as items
       CREATE (node:Node) SET node = items
     `;
 
-    await run(query, {
-      items: data,
-    });
+        await run(query, {
+            items: data,
+        });
 
-    const queryRelations = `
+        const queryRelations = `
       match (a:Node)
       where NOT (a.parent = "")
       match (b:Node)
@@ -44,41 +44,41 @@ const up = async (): Promise<void> => {
       create (a)-[:CHILD_OF]->(b)
     `;
 
-    await run(queryRelations);
-  } catch (err) {
-    console.error(err);
-  }
+        await run(queryRelations);
+    } catch (err) {
+        console.error(err);
+    }
 
-  await closeConnection();
+    await closeConnection();
 };
 
 const down = async (): Promise<void> => {
-  await initConnection();
+    await initConnection();
 
-  try {
-    const query = `
+    try {
+        const query = `
       MATCH (n)
       DETACH DELETE n
     `;
 
-    await run(query);
-  } catch (err) {
-    console.error(err);
-  }
+        await run(query);
+    } catch (err) {
+        console.error(err);
+    }
 
-  await closeConnection();
+    await closeConnection();
 };
 
 const startProcess = async (mode: MigrationType) => {
-  prettyLog(`-- Migration ${mode} - started`);
+    prettyLog(`-- Migration ${mode} - started`);
 
-  await (mode === 'UP' ? up() : down());
+    await (mode === 'UP' ? up() : down());
 
-  prettyLog('-- Process completed');
+    prettyLog('-- Process completed');
 };
 
 if (migrationMode === MigrationType.DOWN || migrationMode === MigrationType.UP) {
-  startProcess(migrationMode);
+    startProcess(migrationMode);
 }
 
 export default startProcess;

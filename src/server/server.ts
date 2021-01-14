@@ -11,11 +11,11 @@ app.get('/all', getAllNodes);
 app.get('/node/:name', getSingleNode);
 
 const startApp = async () => {
-  await initConnection();
+    await initConnection();
 
-  app.listen(process.env.API_SERVER_PORT, () => {
-    console.log(`App listening on port ${process.env.API_SERVER_PORT}`);
-  });
+    app.listen(process.env.API_SERVER_PORT, () => {
+        console.log(`App listening on port ${process.env.API_SERVER_PORT}`);
+    });
 };
 
 startApp();

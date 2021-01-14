@@ -1,8 +1,8 @@
 export enum MigrationType {
-  UP = 'UP',
-  DOWN = 'DOWN',
+    UP = 'UP',
+    DOWN = 'DOWN',
 }
 
 export default {
-  MigrationType,
+    MigrationType,
 };
