@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "server": "ts-node ./src/server/server.ts",
     "migrate": "ts-node ./src/migration/migration.ts UP",
     "migrate:down": "ts-node ./src/migration/migration.ts DOWN",
     "lint": "eslint --fix src/**/*.ts"
