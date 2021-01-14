@@ -1,23 +1,14 @@
 import 'dotenv/config';
 
 import express from 'express';
-import { initConnection, run } from '@shared/helpers/db';
+import { initConnection } from '@shared/helpers/db';
+import getAllNodes from './routes/getAllNodes';
+import getSingleNode from './routes/getSingleNode';
 
 const app = express();
 
-app.get('/', async (req, res) => {
-  try {
-    const result = await run(`
-      MATCH (n)
-      RETURN n
-    `);
-
-    res.send(result);
-  } catch (err) {
-    console.log(err);
-    res.send(err);
-  }
-});
+app.get('/all', getAllNodes);
+app.get('/node/:name', getSingleNode);
 
 const startApp = async () => {
   await initConnection();
