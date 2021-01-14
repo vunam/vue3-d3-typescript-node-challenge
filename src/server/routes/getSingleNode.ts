@@ -21,11 +21,16 @@ const getSingleNode = async (req, res) => {
       RETURN n
     `);
 
-    res.send(result.records);
+    if (!result.records?.length) {
+      throw Error('No results found');
+    }
+
+    res.send(result.records[0]);
   } catch (err) {
-    console.error(err);
+    // Note: Real app should log error and hide full message
     res.send({
       error: 'An error has occurred',
+      message: err.message
     });
   }
 };

@@ -10,7 +10,7 @@ const getAllNodes = async (_, res) => {
 
     res.send(result.records);
   } catch (err) {
-    console.log(err);
+    // Note: Real app should log error and hide full message
     res.send({
       error: 'An error has occurred',
     });
