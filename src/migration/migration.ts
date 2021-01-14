@@ -3,17 +3,18 @@ import chalk from 'chalk';
 import fetch from 'node-fetch';
 import PrettyError from 'pretty-error';
 
-import { initConnection } from '@shared/helpers/db';
+import { initConnection, run, closeConnection } from '@shared/helpers/db';
+
+import { MigrationType } from './types';
 
 new PrettyError().start();
 
 const prettyLog = (text: string) => console.log(chalk.yellow(text));
 
-const migrationMode = process.argv[2];
-const driver = initConnection();
+const migrationMode = process.argv[2] as MigrationType;
 
-export const up = async (): Promise<void> => {
-  const session = driver.session();
+const up = async (): Promise<void> => {
+  await initConnection();
 
   try {
     const response = await fetch(process.env.DATA_FILE_URL, {
@@ -31,7 +32,7 @@ export const up = async (): Promise<void> => {
       CREATE (node:Node) SET node = items
     `;
 
-    await session.run(query, {
+    await run(query, {
       items: data,
     });
 
@@ -43,38 +44,41 @@ export const up = async (): Promise<void> => {
       create (a)-[:CHILD_OF]->(b)
     `;
 
-    await session.run(queryRelations);
+    await run(queryRelations);
   } catch (err) {
     console.error(err);
   }
 
-  await session.close();
-  await driver.close();
+  await closeConnection();
 };
 
-export const down = async (): Promise<void> => {
-  const session = driver.session();
+const down = async (): Promise<void> => {
+  await initConnection();
+
   try {
     const query = `
       MATCH (n)
       DETACH DELETE n
     `;
 
-    await session.run(query);
+    await run(query);
   } catch (err) {
     console.error(err);
   }
 
-  await session.close();
-  await driver.close();
+  await closeConnection();
 };
 
-const startProcess = async () => {
-  prettyLog(`-- Migration ${migrationMode} - started`);
+const startProcess = async (mode: MigrationType) => {
+  prettyLog(`-- Migration ${mode} - started`);
 
-  await (migrationMode === 'UP' ? up() : down());
+  await (mode === 'UP' ? up() : down());
 
   prettyLog('-- Process completed');
 };
 
-startProcess();
+if (migrationMode === MigrationType.DOWN || migrationMode === MigrationType.UP) {
+  startProcess(migrationMode);
+}
+
+export default startProcess;
