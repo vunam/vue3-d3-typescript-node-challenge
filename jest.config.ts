@@ -8,7 +8,12 @@ const config: Config.InitialOptions = {
     ".*\\.(vue)$": "vue-jest"
   },
   moduleNameMapper: {
-    "@shared/(.*)": "<rootDir>/src/shared/$1"
+    "@shared/(.*)": "<rootDir>/src/shared/$1",
+    "@components/(.*)": "<rootDir>/src/app/components/$1",
+    "@app/(.*)": "<rootDir>/src/app/$1"
+ },
+ globals: {
+  API_URL: 'http://mock',
  }
 };
 

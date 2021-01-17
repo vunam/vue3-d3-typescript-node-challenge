@@ -2,6 +2,7 @@ require('dotenv/config');
 const { resolve } = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const appRoot = resolve(__dirname, './src/app');
 const outputPath = resolve(__dirname, './dist');
@@ -15,7 +16,8 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [ '.ts', '.js', '.json', '.vue' ],
-		modules: [ resolve(__dirname, 'node_modules') ]
+		modules: [ resolve(__dirname, 'node_modules') ],
+		plugins: [ new TsconfigPathsPlugin({ configFile: resolve(__dirname, './tsconfig.json') }) ]
 	},
 	module: {
 		rules: [
