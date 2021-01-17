@@ -5,6 +5,11 @@
 </template>
 
 <style lang="css" scope>
+  .SideBar-container {
+    width: 300px;
+    background: #eee;
+    padding: 20px;
+  }
 </style>
 
 <script lang="ts">
