@@ -1,7 +1,7 @@
-import neo4j from 'neo4j-driver';
+import neo4j, { Driver , Session} from 'neo4j-driver';
 
-let driver;
-let session;
+let driver: Driver;
+let session: Session;
 
 export const initConnection = async () => {
 	const [ neo4jUser, neo4jPassword ] = process.env.NEO4J_AUTH.split('/');
