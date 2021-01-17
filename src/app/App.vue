@@ -10,7 +10,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    display: flex;
     height: 100%;
   }
 </style>

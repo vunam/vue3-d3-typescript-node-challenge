@@ -1,3 +1,4 @@
+require('dotenv/config');
 const { resolve } = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -39,7 +40,10 @@ module.exports = {
 		new VueLoaderPlugin(),
 		new HtmlWebpackPlugin({
 			title: 'ABN AMRO challenge',
-			template: resolve(appRoot, 'index.html')
+			template: resolve(appRoot, 'index.html'),
+			templateParameters: {
+				apiUrl: process.env.API_URL
+			}
 		})
 	],
 	devServer: {

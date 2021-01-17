@@ -1,11 +1,11 @@
 <template>
-    <div class="TreeChart-container" :style="cssVars">
+    <div class="TreeChart" :style="cssVars">
         <svg id="svg" :viewBox="viewBox" />
     </div>
 </template>
 
 <style lang="css" scope>
-.TreeChart-container {
+.TreeChart {
     width: var(--width);
 }
 </style>
@@ -99,7 +99,7 @@ export default defineComponent({
                 .attr('transform', ({ x, y }) => `translate(${y},${x - this.nodeHeight / 2})`);
 
             node.append('rect')
-                .attr('fill', ({ data }) => this.state.selectedNode === data.data.name ? '#00f' : '#000')
+                .attr('fill', ({ data }) => this.state.selectedNode === data.data.name ? '#F3C000' : '#029286')
                 .attr('stroke', (d) => '#fff')
                 .attr('width', this.nodeWidth)
                 .attr('height', this.nodeHeight);

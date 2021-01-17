@@ -1,7 +1,7 @@
 <template>
-  <div class="Main-container">
+  <div class="Main" :class="{ 'Main--pushed': isSideBarOpen }">
+    <Header />
     <div v-if="state.nodeList.length" >
-      <h1 class="Main-title">ABN AMRO Code Challenge</h1>
       <TreeChart :data="parentChildData" />
     </div>
      <div v-else>
@@ -12,12 +12,20 @@
 </template>
 
 <style lang="css" scope>
-    .Main-container {
-      flex-grow: 1;
+    .Main {
+      position: absolute;
+      top: 0;
+      left: 0;
       padding: 20px;
+      transition: transform 0.5s;
     }
+
     .Main-title {
       margin-top: 0;
+    }
+
+    .Main--pushed {
+      transform: translate3d(300px, 0, 0);
     }
 </style>
 
@@ -25,16 +33,19 @@
 import { defineComponent, inject } from "vue"
 import { stratify } from "d3-hierarchy";
 import { StateProps, ApiNode } from "../../types"
+import Header from "../Header/Header";
 import TreeChart from "../TreeChart/TreeChart";
+
+declare const API_URL: string;
 
 export default defineComponent({
   inject: ['state', 'setState'],
   async mounted() {
-    const response = await fetch('http://localhost:8888/all');
+    const response = await fetch(`${API_URL}/all`);
     const result = await response.json();
     this.setState('nodeList', result);
   },
-  components: {TreeChart},
+  components: {TreeChart, Header},
   computed: {
     parentChildData() {
       if (!this.state.nodeList.length) {
@@ -47,7 +58,10 @@ export default defineComponent({
         this.state.nodeList)
 
       return root;
-    }
+    },
+    isSideBarOpen() {
+        return !!this.state.selectedNode;
+    },
   }
 })
 </script>
