@@ -5,6 +5,10 @@ jest.mock('@shared/helpers/db', () => ({
 	run: jest.fn()
 }));
 
+jest.mock('../utils/transformPayload', () => ({
+	transformPayloadAll: (data: any) => data
+}));
+
 describe('getAllNodes', () => {
 	it('should return a list of records', async () => {
     const mockedData = {
@@ -30,7 +34,7 @@ describe('getAllNodes', () => {
 
     const mockedRes = {
       send: jest.fn(),
-    }
+    } as any;
 
 		await getAllNodes(null, mockedRes);
 

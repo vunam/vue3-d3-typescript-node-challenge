@@ -8,7 +8,7 @@ import getSingleNode from './routes/getSingleNode';
 
 const app = express();
 
-app.use(cors())
+app.use(cors());
 
 app.get('/all', getAllNodes);
 app.get('/node/:name', getSingleNode);

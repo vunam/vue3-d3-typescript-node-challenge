@@ -16,7 +16,7 @@ describe('Migration', () => {
                 data: [{ something: 'here' }],
             };
 
-            jest.spyOn(fetch, 'default').mockImplementation(() => ({ json: () => mockedData }));
+            jest.spyOn(fetch as any, 'default').mockImplementation(() => ({ json: () => mockedData }));
 
             await startProcess(MigrationType.UP);
 
