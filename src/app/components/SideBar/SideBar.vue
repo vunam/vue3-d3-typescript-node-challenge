@@ -30,12 +30,6 @@ import { defineComponent, reactive } from "vue"
 
 export default defineComponent({
   inject: ['state', 'setState'],
-  data() {
-    console.log(this.state)
-    return {
-      state: this.state
-    }
-  },
   methods: {
     onClick() {
       this.setState('isSideBarOpen', !this.state.isSideBarOpen);

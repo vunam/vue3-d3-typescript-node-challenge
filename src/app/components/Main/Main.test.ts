@@ -25,7 +25,7 @@ describe('Main.vue', () => {
 	it('matches snapshot when data is received', () => {
 		const wrapper = shallowMount(Main, {
 			data() {
-				return { data: [ 'some-data' ] };
+				return { state: { nodeList: [ 'some-data' ] } };
 			}
 		});
 		expect(wrapper.html()).toMatchSnapshot();

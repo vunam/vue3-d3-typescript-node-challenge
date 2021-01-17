@@ -1,11 +1,14 @@
 <template>
-  <div v-if="data.length" class="Main-container">
-    <h1 class="Main-title">ABN AMRO Code Challenge</h1>
-    {{ JSON.stringify(data) }}
+  <div class="Main-container">
+    <div v-if="state.nodeList.length" >
+      <h1 class="Main-title">ABN AMRO Code Challenge</h1>
+      {{ JSON.stringify(state.nodeList) }}
+    </div>
+     <div v-else>
+      Loading...
+    </div>
   </div>
-  <div v-else>
-    Loading...
-  </div>
+ 
 </template>
 
 <style lang="css" scope>
@@ -19,18 +22,15 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, inject } from "vue"
+import { StateProps } from "../../types"
 
 export default defineComponent({
+  inject: ['state', 'setState'],
   async mounted() {
     const response = await fetch('http://localhost:8888/all');
     const result = await response.json();
-    this.data = result;
-  },
-  data() {
-    return {
-      data: []
-    }
+    this.setState('nodeList', result);
   },
 })
 </script>

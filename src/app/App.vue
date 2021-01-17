@@ -19,22 +19,21 @@
 import { defineComponent, reactive, provide } from "vue";
 import SideBar from './components/SideBar/SideBar';
 import Main from './components/Main/Main';
-
-interface StateProps {
-  isSideBarOpen: boolean
-}
+import { StateProps } from './types';
 
 export default defineComponent({
   setup() {
     const state = reactive({
-      isSideBarOpen: true
+      isSideBarOpen: true,
+      nodeList: [],
     });
+
     const setState = <K extends keyof StateProps>(key: K, value: StateProps[K]) => {
       state[key] = value;
     }
 
     provide('state',state);
-    provide('setState',setState);
+    provide('setState', setState);
   },
   components: {
     SideBar, Main,
