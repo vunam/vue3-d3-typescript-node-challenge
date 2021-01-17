@@ -1,11 +1,14 @@
 import 'dotenv/config';
 
 import express from 'express';
+import cors from 'cors';
 import { initConnection } from '@shared/helpers/db';
 import getAllNodes from './routes/getAllNodes';
 import getSingleNode from './routes/getSingleNode';
 
 const app = express();
+
+app.use(cors())
 
 app.get('/all', getAllNodes);
 app.get('/node/:name', getSingleNode);
