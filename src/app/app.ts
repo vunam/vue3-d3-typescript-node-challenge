@@ -1,9 +1,6 @@
 import { createApp } from 'vue';
+import App from './App.vue';
 
-const app = createApp({
-  setup() {
-    console.log('It works!')
-  }
-});
+const app = createApp(App);
 
 app.mount('#root');

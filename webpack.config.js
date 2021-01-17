@@ -13,7 +13,7 @@ module.exports = {
 		path: outputPath
 	},
 	resolve: {
-		extensions: [ '.ts', '.js', '.json' ],
+		extensions: [ '.ts', '.js', '.json', '.vue' ],
 		modules: [ resolve(__dirname, 'node_modules') ]
 	},
 	module: {
@@ -28,6 +28,10 @@ module.exports = {
 				options: {
 					transpileOnly: true
 				}
+			},
+			{
+				test: /\.css$/i,
+				use: [ 'style-loader', 'css-loader' ]
 			}
 		]
 	},
