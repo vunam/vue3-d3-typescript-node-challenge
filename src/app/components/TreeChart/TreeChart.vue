@@ -1,19 +1,19 @@
 <template>
     <div class="TreeChart-container" :style="cssVars">
         Tree
-        <svg id="svg" viewBox="0 0 1200 100" />
+        <svg id="svg" viewBox="0 0 1200 500" />
     </div>
 </template>
 
 <style lang="css" scope>
-#svg {
+.TreeChart-container {
     width: var(--width);
 }
 </style>
 
 <script lang="ts">
 import { defineComponent, inject, reactive } from 'vue';
-import { tree, hierarchy } from 'd3-hierarchy';
+import { tree, hierarchy, HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { linkHorizontal } from 'd3-shape';
 import { StateProps, ApiNode } from '../../types';
@@ -26,6 +26,8 @@ export default defineComponent({
     setup() {
         const localState = reactive({
             width: getWindowWidth(),
+            nodeHeight: 50,
+            nodeWidth: 100,
         });
 
         window.addEventListener('resize', function () {
@@ -33,11 +35,12 @@ export default defineComponent({
             localState.width = getWindowWidth();
         });
         return localState;
+        return {};
     },
     mounted() {
         const treeTransform = (data: any) => {
             const root: any = hierarchy(data);
-            root.dx = 10;
+            root.dx = this.nodeWidth;
             root.dy = this.width / (root.height + 1);
             return tree().nodeSize([root.dx, root.dy])(root);
         };
@@ -46,6 +49,7 @@ export default defineComponent({
 
         let x0 = Infinity;
         let x1 = -x0;
+
         root.each((d) => {
             if (d.x > x1) x1 = d.x;
             if (d.x < x0) x0 = d.x;
@@ -53,8 +57,7 @@ export default defineComponent({
 
         const svg = select('svg');
         console.log(root);
-        const g = svg
-            .append('g');
+        const g = svg.append('g').attr('transform', `translate(${root.dy / 4}, ${root.dx - x0})`);
 
         const link = g
             .append('g')
@@ -66,8 +69,8 @@ export default defineComponent({
             .attr(
                 'd',
                 (linkHorizontal as any)()
-                    .x((d) => d.y)
-                    .y((d) => d.x),
+                    .x((d: HierarchyPointNode<{}>) => d.y)
+                    .y((d: HierarchyPointNode<{}>) => d.x),
             );
 
         const node = g
@@ -75,20 +78,20 @@ export default defineComponent({
             .selectAll('g')
             .data(root.descendants())
             .join('g')
-            .attr('transform', (d) => `translate(${d.y},${d.x})`);
+            .attr('transform', (d) => `translate(${d.y},${d.x - this.nodeHeight / 2})`);
 
         node.append('rect')
             .attr('fill', (d) => '#000')
             .attr('stroke', (d) => '#fff')
-            .attr('width', 50)
-            .attr('height', 50);
+            .attr('width', this.nodeWidth)
+            .attr('height', this.nodeHeight);
 
         return svg.node();
     },
     computed: {
         cssVars() {
             return {
-                '--width': this.width - 300 + 'px',
+                '--width': `${this.width - 300}px`,
             };
         },
     },
