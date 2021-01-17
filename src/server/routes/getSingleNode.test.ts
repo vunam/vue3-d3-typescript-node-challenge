@@ -5,6 +5,10 @@ jest.mock('@shared/helpers/db', () => ({
 	run: jest.fn()
 }));
 
+jest.mock('../utils/transformPayload', () => ({
+	transformPayloadSingle: (data: any) => data
+}));
+
 describe('getSingleNode', () => {
 	const mockedData = {
 		records: [ 'A-1' ]

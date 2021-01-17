@@ -24,8 +24,9 @@ import { StateProps } from './types';
 export default defineComponent({
   setup() {
     const state = reactive({
-      isSideBarOpen: true,
       nodeList: [],
+      selectedNode: null,
+      nodeData: null,
     });
 
     const setState = <K extends keyof StateProps>(key: K, value: StateProps[K]) => {

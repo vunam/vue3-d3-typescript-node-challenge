@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { run } from '@shared/helpers/db';
+import { transformPayloadSingle } from '../utils/transformPayload';
 
 const validateInputSafety = (text: string) => /^([a-zA-Z])(-[0-9])?$/.test(text);
 
@@ -25,7 +26,9 @@ const getSingleNode = async (req: Request, res: Response) => {
       throw Error('No results found');
     }
 
-    res.send(result.records[0]);
+    const resultNode = transformPayloadSingle(result.records[0])
+
+    res.send(resultNode);
   } catch (err) {
     // Note: Real app should log error and hide full message
     res.send({

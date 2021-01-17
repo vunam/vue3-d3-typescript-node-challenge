@@ -1,7 +1,7 @@
 <template>
     <div class="TreeChart-container" :style="cssVars">
         Tree
-        <svg id="svg" viewBox="0 0 1200 500" />
+        <svg id="svg" :viewBox="viewBox" />
     </div>
 </template>
 
@@ -34,8 +34,8 @@ export default defineComponent({
             console.log(getWindowWidth());
             localState.width = getWindowWidth();
         });
+
         return localState;
-        return {};
     },
     mounted() {
         const treeTransform = (data: any) => {
@@ -44,7 +44,6 @@ export default defineComponent({
             root.dy = this.width / (root.height + 1);
             return tree().nodeSize([root.dx, root.dy])(root);
         };
-        console.log(this.data);
         const root = treeTransform(this.data);
 
         let x0 = Infinity;
@@ -56,7 +55,6 @@ export default defineComponent({
         });
 
         const svg = select('svg');
-        console.log(root);
         const g = svg.append('g').attr('transform', `translate(${root.dy / 4}, ${root.dx - x0})`);
 
         const link = g
@@ -78,7 +76,7 @@ export default defineComponent({
             .selectAll('g')
             .data(root.descendants())
             .join('g')
-            .attr('transform', (d) => `translate(${d.y},${d.x - this.nodeHeight / 2})`);
+            .attr('transform', ({ x, y }) => `translate(${y},${x - this.nodeHeight / 2})`);
 
         node.append('rect')
             .attr('fill', (d) => '#000')
@@ -89,22 +87,27 @@ export default defineComponent({
         node.append('text')
             .attr('fill', (d) => '#fff')
             .attr('z-index', (d) => '22')
-            .text((d) => {
-                console.log(d);
-                return d.data.data.name;
-            })
+            .text(({ data }) => data.data.name)
             .attr(
                 'transform',
-                (d) => `translate(${this.nodeWidth / 2 - 3 * d.data.data.name.length},${this.nodeHeight / 2 + 3})`,
+                ({ data }) => `translate(${this.nodeWidth / 2 - 3 * data.data.name.length},${this.nodeHeight / 2 + 3})`,
             );
+
+        node.on("click", (event: MouseEvent, { data }) => {
+          console.log(data.data.name);
+          this.setState('selectedNode', data.data.name)
+        });
 
         return svg.node();
     },
     computed: {
         cssVars() {
             return {
-                '--width': `${this.width - 300}px`,
+                '--width': `${this.width - 340}px`,
             };
+        },
+        viewBox() {
+            return  `0 0 ${this.width} ${this.width / 2}`;
         },
     },
 });

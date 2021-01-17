@@ -1,5 +1,5 @@
 export interface StateProps {
-    isSideBarOpen: boolean;
+    selectedNode: boolean;
     nodeList: [];
 }
 export interface ApiNode {
