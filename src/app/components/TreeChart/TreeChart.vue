@@ -86,6 +86,18 @@ export default defineComponent({
             .attr('width', this.nodeWidth)
             .attr('height', this.nodeHeight);
 
+        node.append('text')
+            .attr('fill', (d) => '#fff')
+            .attr('z-index', (d) => '22')
+            .text((d) => {
+                console.log(d);
+                return d.data.data.name;
+            })
+            .attr(
+                'transform',
+                (d) => `translate(${this.nodeWidth / 2 - 3 * d.data.data.name.length},${this.nodeHeight / 2 + 3})`,
+            );
+
         return svg.node();
     },
     computed: {
