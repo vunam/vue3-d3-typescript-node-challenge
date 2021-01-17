@@ -1,9 +1,9 @@
 <template>
-  <div class="SideBar-container" :class="{ 'SideBar-container--active': sideBarOpen }">
+  <div class="SideBar-container" :class="{ 'SideBar-container--active': state.isSideBarOpen }">
     <div class="SideBar-inner">
       SideBar
       <button @click="onClick">Toggle sidebar</button>
-      {{ sideBarOpen }}
+      {{ state.isSideBarOpen }}
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
     width: 300px;
     background: #eee;
     transition: transform 0.5s;
+    transform: translate3d(-300px, 0, 0);
   }
 
   .SideBar-inner {
@@ -20,7 +21,7 @@
   }
 
   .SideBar-container--active {
-    transform: translate3d(-300px, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 </style>
 
@@ -28,15 +29,16 @@
 import { defineComponent, reactive } from "vue"
 
 export default defineComponent({
-  setup() {
-    const state = reactive({
-      sideBarOpen: false,
-    });
-    return state;
+  inject: ['state', 'setState'],
+  data() {
+    console.log(this.state)
+    return {
+      state: this.state
+    }
   },
   methods: {
     onClick() {
-      this.sideBarOpen = !this.sideBarOpen;
+      this.setState('isSideBarOpen', !this.state.isSideBarOpen);
     }
   }
 })

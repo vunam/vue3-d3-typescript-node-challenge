@@ -16,11 +16,26 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, provide } from "vue";
 import SideBar from './components/SideBar/SideBar';
 import Main from './components/Main/Main';
 
+interface StateProps {
+  isSideBarOpen: boolean
+}
+
 export default defineComponent({
+  setup() {
+    const state = reactive({
+      isSideBarOpen: true
+    });
+    const setState = <K extends keyof StateProps>(key: K, value: StateProps[K]) => {
+      state[key] = value;
+    }
+
+    provide('state',state);
+    provide('setState',setState);
+  },
   components: {
     SideBar, Main,
   },
