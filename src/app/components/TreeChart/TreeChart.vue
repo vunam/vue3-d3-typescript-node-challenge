@@ -1,30 +1,38 @@
 <template>
     <div class="TreeChart-container" :style="cssVars">
         Tree
-        <svg id="svg" viewBox="0 0 800 100" />
+        <svg id="svg" viewBox="0 0 1200 100" />
     </div>
 </template>
 
 <style lang="css" scope>
-  .TreeChart-container {
+#svg {
     width: var(--width);
-  }
+}
 </style>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, inject, reactive } from 'vue';
 import { tree, hierarchy } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import { linkHorizontal } from 'd3-shape';
 import { StateProps, ApiNode } from '../../types';
 
+const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
 export default defineComponent({
     inject: ['state', 'setState'],
     props: ['data'],
     setup() {
-        return {
-            width: 1000,
-        };
+        const localState = reactive({
+            width: getWindowWidth(),
+        });
+
+        window.addEventListener('resize', function () {
+            console.log(getWindowWidth());
+            localState.width = getWindowWidth();
+        });
+        return localState;
     },
     mounted() {
         const treeTransform = (data: any) => {
@@ -80,7 +88,7 @@ export default defineComponent({
     computed: {
         cssVars() {
             return {
-                '--width': this.width + 'px',
+                '--width': this.width - 300 + 'px',
             };
         },
     },
