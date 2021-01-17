@@ -5,8 +5,8 @@ import { transformPayloadAll } from '../utils/transformPayload';
 const getAllNodes = async (_: Request, res: Response) => {
   try {
     const result = await run(`
-        MATCH (n: Node {parent: ""})<-[r:CHILD_OF*]-(child: Node)
-        RETURN n, r, child
+        MATCH (n)
+        RETURN n
     `);
 
     const transformedData = result.records.map(transformPayloadAll);

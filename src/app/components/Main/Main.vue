@@ -2,7 +2,7 @@
   <div class="Main-container">
     <div v-if="state.nodeList.length" >
       <h1 class="Main-title">ABN AMRO Code Challenge</h1>
-      {{ JSON.stringify(state.nodeList) }}
+      <TreeChart :data="parentChildData" />
     </div>
      <div v-else>
       Loading...
@@ -23,7 +23,9 @@
 
 <script lang="ts">
 import { defineComponent, inject } from "vue"
-import { StateProps } from "../../types"
+import { stratify } from "d3-hierarchy";
+import { StateProps, ApiNode } from "../../types"
+import TreeChart from "../TreeChart/TreeChart";
 
 export default defineComponent({
   inject: ['state', 'setState'],
@@ -32,5 +34,20 @@ export default defineComponent({
     const result = await response.json();
     this.setState('nodeList', result);
   },
+  components: {TreeChart},
+  computed: {
+    parentChildData() {
+      if (!this.state.nodeList.length) {
+        return [];
+      }
+
+      const root = stratify()
+        .id((d: ApiNode) => d.name)
+        .parentId((d: ApiNode) => d.parent)(
+        this.state.nodeList)
+
+      return root;
+    }
+  }
 })
 </script>
