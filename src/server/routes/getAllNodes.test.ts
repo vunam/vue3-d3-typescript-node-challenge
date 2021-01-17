@@ -18,7 +18,7 @@ describe('getAllNodes', () => {
 
     const mockedRes = {
       send: jest.fn(),
-    }
+    } as any;
 
 		await getAllNodes(null, mockedRes);
 

@@ -1,9 +1,9 @@
-
+import { Request, Response } from 'express';
 import { run } from '@shared/helpers/db';
 
 const validateInputSafety = (text: string) => /^([a-zA-Z])(-[0-9])?$/.test(text);
 
-const getSingleNode = async (req, res) => {
+const getSingleNode = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
 

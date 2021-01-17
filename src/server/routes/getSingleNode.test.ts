@@ -13,12 +13,12 @@ describe('getSingleNode', () => {
 	(run as jest.MockedFunction<any>).mockImplementation(async () => mockedData);
 
 	it('should return a single result', async () => {
-		const mockedReq = {
+		const mockedReq: any = {
 			params: {
 				name: 'A-1'
 			}
 		};
-		const mockedRes = {
+		const mockedRes: any = {
 			send: jest.fn()
 		};
 
@@ -28,10 +28,10 @@ describe('getSingleNode', () => {
 	});
 
 	it('should error when no name is given', async () => {
-		const mockedReq = {
+		const mockedReq: any = {
 			params: {}
 		};
-		const mockedRes = {
+		const mockedRes: any = {
 			send: jest.fn()
 		};
 
@@ -41,12 +41,12 @@ describe('getSingleNode', () => {
 	});
 
 	it('should error on illegal node name', async () => {
-		const mockedReq = {
+		const mockedReq: any = {
 			params: {
 				name: '2B'
 			}
 		};
-		const mockedRes = {
+		const mockedRes: any = {
 			send: jest.fn()
 		};
 
@@ -56,16 +56,16 @@ describe('getSingleNode', () => {
 	});
 
 	it('should error when no records are found', async () => {
-		const mockedReq = {
+		const mockedReq: any = {
 			params: {
 				name: 'B-2'
 			}
 		};
-		const mockedRes = {
+		const mockedRes: any = {
 			send: jest.fn()
 		};
 
-		(run as jest.MockedFunction<any>).mockImplementationOnce(async () => []);
+		(run as jest.MockedFunction<any>).mockImplementationOnce(async (): Promise<[]> => []);
 
 		await getSingleNode(mockedReq, mockedRes);
 
