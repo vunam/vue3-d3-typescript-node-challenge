@@ -1,4 +1,4 @@
-# ABN AMRO Nerf Herders Coding Challenge
+# Coding Challenge
 **Applicant: Vu Nam Nguyen**
 
 ## Intro
@@ -17,8 +17,9 @@ Node LTS 14.5
 ```
   docker run --name neo4j -p7474:7474 -p7687:7687 -d --env-file .env neo4j:latest
 ```
-4. `npm run server` first to set up the server and then `npm start`
-5. `npm test` for running the tests
+4. `npm run migrate` to migrate data to DB
+5. `npm run server` first to set up the server and then `npm start`
+6. `npm test` for running the tests
 
 ### Improvements with more time
 

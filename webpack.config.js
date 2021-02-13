@@ -41,7 +41,7 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin(),
 		new HtmlWebpackPlugin({
-			title: 'ABN AMRO challenge',
+			title: 'Coding challenge',
 			template: resolve(appRoot, 'index.html'),
 			templateParameters: {
 				apiUrl: process.env.API_URL

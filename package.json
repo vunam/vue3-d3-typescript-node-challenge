@@ -1,7 +1,7 @@
 {
-  "name": "abn-test",
+  "name": "code-challege",
   "version": "0.0.1",
-  "description": "ABN AMRO Nerf Herders Coding Challenge",
+  "description": "Coding Challenge",
   "main": "index.js",
   "scripts": {
     "test": "jest",
